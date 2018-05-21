@@ -15,7 +15,7 @@ top_select=30
 
 #cur_path=os.path.dirname(__file__)
 #cur_path
-df = pd.read_csv('./eil51.csv')
+df = pd.read_csv('d:/Desktop/python code/Ant_colony_optimization_eil51/eil51.csv')
 #df = pd.read_csv('d:/Desktop/eil51/eil51.csv')
 x=np.array(df.x)
 x
@@ -134,6 +134,20 @@ def plotpath(a_path,file_num):
     
     return
 
+def write_file(a_path,file_num):
+
+    num=get_routine_dist(a_path)
+    filename=(r"%3d.%04d" %(int(num),(num-int(num))*10000))
+    f=open('./%s/%s.txt' %(folder,filename),'w')
+    
+    for city in a_path:
+        f.write("%3d %f %f\n"  %(city,x[city],y[city]))
+    
+    
+    f.close()
+    return
+    
+
 def update_pheromone(curr_arr):
     global pheromone
     global Q
@@ -202,7 +216,7 @@ def ini_pheromone():
 
 
 
-for k in range(6,10000):
+for k in range(31,10000):
     
     folder=("test%05d" %(k))
     os.mkdir(folder)
@@ -258,6 +272,7 @@ for k in range(6,10000):
             best_dist_value=min(path_record)
             print("index=",index)
             plotpath(best_path,i)
+            write_file(best_path,i)
         trend.append(best_dist_value)    
         
         print("routine dist=",i,best_dist_value)
@@ -275,6 +290,14 @@ for k in range(6,10000):
     print("routine dist=",get_routine_dist(best_path))
     plt.plot(trend)
     plt.savefig('./%s/trend.png' %(folder))
+    
+    f=open('./%s/trend.txt' %(folder),'w')
+    for i in range(len(trend)):
+        f.write('%d %f\n' %(i,trend[i]))
+    
+    f.close()
+    
+    
     #plotpath(best_sol)
     #print(dij)
 
